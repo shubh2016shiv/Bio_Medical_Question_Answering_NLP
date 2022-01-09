@@ -11,6 +11,21 @@ st.title("Project - Topic Modelling and Question Answering on Bio-Medical Text")
 mongo_connection, config = st_initlialize.initialize_streamlit_and_mongodb()
 collection = mongo_connection.get_collection()
 
+
+# Functions
+@st.experimental_singleton(suppress_st_warning=True)
+def get_cached_topic_cluster_model():
+    with st.spinner("Loading BERT Topic Model..."):
+        model_path_ = config['topic_cluster']['model_path'] + "/" + config['topic_cluster']['model_name']
+        if os.path.isdir(config['topic_cluster']['model_path']) and os.path.exists(model_path_):
+            topic_model_ = BERTopic.load(model_path_)
+            return topic_model_
+        else:
+            st.info("BERT Topic model is not available")
+            return None
+
+
+
 st.sidebar.header("Navigation")
 navigation_options = st.sidebar.radio("Options", options=["Show Project Architecture and details",
                                                           "Search Bio-Topics & Questions",
@@ -31,10 +46,19 @@ if navigation_options == "Show Project Architecture and details":
             gc.collect()
     elif os.path.exists(model_path):
         st.info("Model already exists")
+        
 elif navigation_options == "Search Bio-Topics & Questions":
-    with st.spinner("Loading BERT Topic Model..."):
-        model_path = config['topic_cluster']['model_path'] + "/" + config['topic_cluster']['model_name']
-        if os.path.isdir(config['topic_cluster']['model_path']) and os.path.exists(model_path):
-            topic_model = BERTopic.load(model_path)
-        else:
-            st.info("BERT Topic model is not available")
+    topic_model = get_cached_topic_cluster_model()
+    topic_selection = st.sidebar.selectbox(
+        "Select the method of determining Topics",
+        ["Bio Clusters", "Diseases", "Genetics"]
+    )
+
+    if topic_selection == 'Bio Clusters':
+        HtmlFile = open(config['topic_cluster']['model_path'] + "/" + config['topic_cluster']['cluster_viz_name']
+                        , 'r', encoding='utf-8')
+        source_code = HtmlFile.read()
+
+        components.html(source_code, height=650)
+        bio_topics = st.sidebar.selectbox("Select the Bio Cluster Topic Number",
+                                          ["Topic {}".format(i) for i in range(0, len(topic_model.topics) - 1)])
