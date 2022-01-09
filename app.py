@@ -26,6 +26,37 @@ def get_cached_topic_cluster_model():
             return None
 
 
+def get_keywords_and_filter_query(_topic_model, _bio_topics):
+    words = [word[0] for word in _topic_model.get_topic(int(_bio_topics.split(" ")[1]))]
+
+    keywords = st_tags(
+        label='# Words:',
+        text='Press enter to add more',
+        value=words,
+        maxtags=15)
+
+    st.write('<style>div.row-widget.stRadio > div{flex-direction:row;justify-content: center;} </style>',
+             unsafe_allow_html=True)
+
+    st.write('<style>div.st-bf{flex-direction:column;} div.st-ag{font-weight:bold;padding-left:2px;}</style>',
+             unsafe_allow_html=True)
+
+    and_or_filter = st.radio("Filter Documents by 'OR' or 'AND' keywords in MongoDB", ("OR", "AND"))
+
+    doc_filter_query = []
+    for topic in keywords:
+        doc_filter_query.append({"context": {'$regex': topic}})
+
+    if and_or_filter == 'OR':
+        doc_filter_query = {'$or': doc_filter_query}
+    elif and_or_filter == 'AND':
+        doc_filter_query = {'$and': doc_filter_query}
+
+    filter_query_expander = st.expander("Expand to show Filter Query")
+    with filter_query_expander:
+        st.write(doc_filter_query)
+        
+        
 
 st.sidebar.header("Navigation")
 navigation_options = st.sidebar.radio("Options", options=["Show Project Architecture and details",
@@ -33,6 +64,7 @@ navigation_options = st.sidebar.radio("Options", options=["Show Project Architec
                                                           "Search Answers based on Questions"])
 
 if navigation_options == "Show Project Architecture and details":
+    st.info("💁Press the below button to trigger the Engine")
     model_path = config['topic_cluster']['model_path'] + "/" + config['topic_cluster']['model_name']
     if st.button(label="Initialize models") and not os.path.exists(model_path):
         with st.spinner("Please wait. Creating BERT Topic Model.."):
@@ -46,7 +78,7 @@ if navigation_options == "Show Project Architecture and details":
             del topic_model, cluster_viz
             gc.collect()
     elif os.path.exists(model_path):
-        st.info("Model already exists")
+        st.success("Models are ready and Engine is now hot!!")
         
 elif navigation_options == "Search Bio-Topics & Questions":
     topic_model = get_cached_topic_cluster_model()
@@ -63,3 +95,5 @@ elif navigation_options == "Search Bio-Topics & Questions":
         components.html(source_code, height=650)
         bio_topics = st.sidebar.selectbox("Select the Bio Cluster Topic Number",
                                           ["Topic {}".format(i) for i in range(0, len(topic_model.topics) - 1)])
+        
+        get_keywords_and_filter_query(topic_model, bio_topics)
