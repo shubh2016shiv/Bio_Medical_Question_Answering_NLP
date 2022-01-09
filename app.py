@@ -4,6 +4,7 @@ import st_initlialize
 from bioTopics.topics_by_cluster import TopicsByCluster
 import gc
 import os
+import streamlit.components.v1 as components
 
 st.set_page_config(layout="wide")
 st.title("Project - Topic Modelling and Question Answering on Bio-Medical Text")
