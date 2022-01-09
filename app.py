@@ -20,7 +20,7 @@ if navigation_options == "Show Project Architecture and details":
     model_path = config['topic_cluster']['model_path'] + "/" + config['topic_cluster']['model_name']
     if st.button(label="Initialize models") and not os.path.exists(model_path):
         with st.spinner("Please wait. Creating BERT Topic Model.."):
-            topic_by_cluster = TopicsByCluster(bio_asq_path='./BioASQ_data')
+            topic_by_cluster = TopicsByCluster(bio_asq_path=config['bioASQ_path']['path'])
             topic_model = topic_by_cluster.trainBERTopicTransformerModel(
                 topic_model_save_path=config['topic_cluster']['model_path'],
                 topic_model_save_name=config['topic_cluster']['model_name'])
