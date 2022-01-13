@@ -49,7 +49,7 @@ def get_cached_qa_encoding_model():
 
     encoded_corpus = torch.load(config['qa_encoded_corpus']['path']
                                 + "/" +
-                                config['qa_encoded_corpus']['encoded_corpus_name'])
+                                config['qa_encoded_corpus']['encoded_corpus_name'],map_location=torch.device('cpu'))
 
     return model,encoded_corpus        
         
