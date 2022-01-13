@@ -40,6 +40,19 @@ def get_cached_disease_genetic_entities(entity_type):
     elif entity_type == 'genetics':
         return topics.getGenetics()        
         
+@st.experimental_singleton(suppress_st_warning=True)
+def get_cached_qa_encoding_model():
+    model = joblib.load(config['qa_encoded_corpus']['path']
+                        + "/" +
+                        config['qa_encoded_corpus']['model_name'])
+
+    encoded_corpus = torch.load(config['qa_encoded_corpus']['path']
+                                + "/" +
+                                config['qa_encoded_corpus']['encoded_corpus_name'])
+
+    return model,encoded_corpus        
+        
+        
 def get_keywords_and_filter_query(_topic_model, _bio_topics):
     words = [word[0] for word in _topic_model.get_topic(int(_bio_topics.split(" ")[1]))]
 
@@ -171,4 +184,5 @@ elif navigation_options == "Search Bio-Topics & Questions":
         get_docs_and_ques(filter_query)
         
 elif navigation_options == "Search Answers based on Questions":        
-    st.write("")
+    with st.spinner("Please Wait. Setting up Information Retriever.. "):
+        model,encoded_corpus = get_cached_qa_encoding_model()
