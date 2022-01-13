@@ -88,9 +88,9 @@ navigation_options = st.sidebar.radio("Options", options=["Show Project Architec
                                                           "Search Answers based on Questions"])
 
 if navigation_options == "Show Project Architecture and details":
-    st.info("💁Press the below button to trigger the Engine")
+    st.info("💁Mark the below checkbox step by step to trigger the Engine")
     model_path = config['topic_cluster']['model_path'] + "/" + config['topic_cluster']['model_name']
-    if st.button(label="Initialize models") and not os.path.exists(model_path):
+    if st.checkbox(label="Initialize models") and not os.path.exists(model_path):
         with st.spinner("Please wait. Creating BERT Topic Model.."):
             topic_by_cluster = TopicsByCluster(bio_asq_path=config['bioASQ_path']['path'])
             topic_model = topic_by_cluster.trainBERTopicTransformerModel(
@@ -102,7 +102,7 @@ if navigation_options == "Show Project Architecture and details":
             del topic_model, cluster_viz
             gc.collect()
             
-    elif st.button(label="Download Extracted Disease and Genetic Entities") and not (os.path.exists(config['NER']['disease_genetics_NER_path'])):
+    elif st.checkbox(label="Download Extracted Disease and Genetic Entities") and not (os.path.exists(config['NER']['disease_genetics_NER_path'])):
         with st.spinner("Please wait. Downloading Extracted Diseases and Genes related NER.."):
              if not os.path.isdir(config['NER']['disease_genetics_NER_path']):
                  os.mkdir(config['NER']['disease_genetics_NER_path'])
