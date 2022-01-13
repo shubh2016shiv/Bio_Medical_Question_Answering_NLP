@@ -102,17 +102,17 @@ if navigation_options == "Show Project Architecture and details":
             del topic_model, cluster_viz
             gc.collect()
             
-        elif st.button(label="Download Extracted Disease and Genetic Entities") and \
-            not (os.path.exists(config['NER']['disease_genetics_NER_path'])):
-            with st.spinner("Please wait. Downloading Extracted Diseases and Genes related NER.."):
-                if not os.path.isdir(config['NER']['disease_genetics_NER_path']):
-                    os.mkdir(config['NER']['disease_genetics_NER_path'])
-                    gdown.download_file_from_google_drive(config['NER']['disease_NER_share_id'],
+    elif st.button(label="Download Extracted Disease and Genetic Entities") and not (os.path.exists(config['NER']['disease_genetics_NER_path'])):
+        with st.spinner("Please wait. Downloading Extracted Diseases and Genes related NER.."):
+             if not os.path.isdir(config['NER']['disease_genetics_NER_path']):
+                 os.mkdir(config['NER']['disease_genetics_NER_path'])
+                 gdown.download_file_from_google_drive(config['NER']['disease_NER_share_id'],
                                                           config['NER']['disease_genetics_NER_path']
                                                           + "/" + 'DiseasesNER.txt')
-                    gdown.download_file_from_google_drive(config['NER']['genetics_NER_share_id'],
+                 gdown.download_file_from_google_drive(config['NER']['genetics_NER_share_id'],
                                                           config['NER']['disease_genetics_NER_path']
                                                           + "/" + 'geneticsNER.txt')
+                
     elif (os.path.exists(model_path)) and (os.path.exists(config['NER']['disease_genetics_NER_path'])):
         st.success("Models are ready and Engine is now hot!!")
         
