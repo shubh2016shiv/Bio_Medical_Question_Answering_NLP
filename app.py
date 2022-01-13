@@ -6,6 +6,9 @@ import gc
 import os
 import streamlit.components.v1 as components
 from streamlit_tags import st_tags
+from collections import OrderedDict
+from bioTopics.topics_by_diseases_or_genetics import TopicsByDiseasesOrGenetics
+import gdown
 
 st.set_page_config(layout="wide")
 st.title("Project - Topic Modelling and Question Answering on Bio-Medical Text")
@@ -26,7 +29,14 @@ def get_cached_topic_cluster_model():
             st.info("BERT Topic model is not available")
             return None
 
-
+@st.experimental_singleton(suppress_st_warning=True)
+def get_cached_disease_genetic_entities(entity_type):
+    topics = TopicsByDiseasesOrGenetics(ner_path=config['NER']['disease_genetics_NER_path'])
+    if entity_type == 'disease':
+        return topics.getDiseases()
+    elif entity_type == 'genetics':
+        return topics.getGenetics()        
+        
 def get_keywords_and_filter_query(_topic_model, _bio_topics):
     words = [word[0] for word in _topic_model.get_topic(int(_bio_topics.split(" ")[1]))]
 
@@ -57,7 +67,20 @@ def get_keywords_and_filter_query(_topic_model, _bio_topics):
     with filter_query_expander:
         st.write(doc_filter_query)
         
+    return doc_filter_query
         
+ 
+def get_docs_and_ques(query):
+    with st.spinner("Filtering Documents in Mongo Cloud Database and fetching results"):
+        _documents, _questions = mongo_connection.get_filtered_bioasq_docs(query)
+    doc_expander = st.expander("Expand it to get filtered documents based on query from Mongo Database")
+    query_expander = st.expander("Expand it to get filtered question based on query from Mongo Database", expanded=True)
+    _documents, _questions = list(OrderedDict.fromkeys(_documents)),list(OrderedDict.fromkeys(_questions))
+    with doc_expander:
+        st.write(_documents)
+    with query_expander:
+        st.write(_questions)
+
 
 st.sidebar.header("Navigation")
 navigation_options = st.sidebar.radio("Options", options=["Show Project Architecture and details",
@@ -78,7 +101,19 @@ if navigation_options == "Show Project Architecture and details":
             cluster_viz.write_html(config['topic_cluster']['model_path'] + "/" + config['topic_cluster']['cluster_viz_name'])
             del topic_model, cluster_viz
             gc.collect()
-    elif os.path.exists(model_path):
+            
+        elif st.button(label="Download Extracted Disease and Genetic Entities") and \
+            not (os.path.exists(config['NER']['disease_genetics_NER_path'])):
+            with st.spinner("Please wait. Downloading Extracted Diseases and Genes related NER.."):
+                if not os.path.isdir(config['NER']['disease_genetics_NER_path']):
+                    os.mkdir(config['NER']['disease_genetics_NER_path'])
+                    gdown.download_file_from_google_drive(config['NER']['disease_NER_share_id'],
+                                                          config['NER']['disease_genetics_NER_path']
+                                                          + "/" + 'DiseasesNER.txt')
+                    gdown.download_file_from_google_drive(config['NER']['genetics_NER_share_id'],
+                                                          config['NER']['disease_genetics_NER_path']
+                                                          + "/" + 'geneticsNER.txt')
+    elif (os.path.exists(model_path)) and (os.path.exists(config['NER']['disease_genetics_NER_path'])):
         st.success("Models are ready and Engine is now hot!!")
         
 elif navigation_options == "Search Bio-Topics & Questions":
@@ -97,4 +132,17 @@ elif navigation_options == "Search Bio-Topics & Questions":
         bio_topics = st.sidebar.selectbox("Select the Bio Cluster Topic Number",
                                           ["Topic {}".format(i) for i in range(0, len(topic_model.topics) - 1)])
         
-        get_keywords_and_filter_query(topic_model, bio_topics)
+        filter_query = get_keywords_and_filter_query(topic_model, bio_topics)
+        get_docs_and_ques(filter_query)
+        
+    elif topic_selection == 'Diseases':
+        disease_entities = get_cached_disease_genetic_entities(entity_type='disease')
+        disease_option = st.selectbox("Diseases / Health Issues / Syndromes", sorted(disease_entities))
+        filter_query = {"context": {'$regex': disease_option}}
+        get_docs_and_ques(filter_query)
+
+    elif topic_selection == 'Genetics':
+        genetics_entities = get_cached_disease_genetic_entities(entity_type='genetics')
+        genetics_option = st.selectbox("Genes / Proteins / Antibodies", sorted(genetics_entities))
+        filter_query = {"context": {'$regex': genetics_option}}
+        get_docs_and_ques(filter_query)
