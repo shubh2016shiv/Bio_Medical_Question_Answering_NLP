@@ -9,6 +9,9 @@ from streamlit_tags import st_tags
 from collections import OrderedDict
 from bioTopics.topics_by_diseases_or_genetics import TopicsByDiseasesOrGenetics
 import gdown
+from bioQuestionAnswering.information_retriever import InformationRetriever
+import torch
+
 
 st.set_page_config(layout="wide")
 st.title("Project - Topic Modelling and Question Answering on Bio-Medical Text")
@@ -113,7 +116,21 @@ if navigation_options == "Show Project Architecture and details":
                                                           config['NER']['disease_genetics_NER_path']
                                                           + "/" + 'geneticsNER.txt')
                 
-    elif (os.path.exists(model_path)) and (os.path.exists(config['NER']['disease_genetics_NER_path'])):
+    elif st.checkbox(label="Encode Bio-Medical Corpus using Sentence Transformer") and not \
+            (os.path.exists(config['encoded_corpus']['path'])):
+        st.info("💁Initiating Information Retriever")
+        with st.spinner("Please Wait. Setting up Information Retriever.. "):
+            retriever = InformationRetriever(bio_asq_path=config['bioASQ_path']['path'])
+
+            if not os.path.isdir(config['encoded_corpus']['path']):
+                with st.spinner("Encoding the whole corpus into a model. "):
+                    encoded_bioQA_corpus = retriever.encode_docs_using_qa_transformer(
+                        encoded_corpus_save_path=config['encoded_corpus']['path'],
+                        encoded_corpus_save_name=config['encoded_corpus']['model_name'])
+
+        del retriever, encoded_bioQA_corpus
+        gc.collect()
+    elif (os.path.exists(model_path)) and (os.path.exists(config['NER']['disease_genetics_NER_path'])) and (os.path.exists(config['encoded_corpus']['path'])):
         st.success("Models are ready and Engine is now hot!!")
         
 elif navigation_options == "Search Bio-Topics & Questions":
@@ -146,3 +163,8 @@ elif navigation_options == "Search Bio-Topics & Questions":
         genetics_option = st.selectbox("Genes / Proteins / Antibodies", sorted(genetics_entities))
         filter_query = {"context": {'$regex': genetics_option}}
         get_docs_and_ques(filter_query)
+        
+elif navigation_options == "Search Answers based on Questions":        
+    with st.spinner(f"💁Loading the encoded corpus from path: {config['encoded_corpus']['path']}."):
+        encoded_bioQA_corpus = torch.load(
+                    config['encoded_corpus']['path'] + "\\" + config['encoded_corpus']['model_name'])
