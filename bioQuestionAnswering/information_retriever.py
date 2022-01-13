@@ -6,7 +6,6 @@ import os
 from sentence_transformers import SentenceTransformer, util
 import time
 import torch
-import streamlit as st
 
 
 class InformationRetriever:
@@ -20,7 +19,7 @@ class InformationRetriever:
     def get_documents(self):
         documents = []
         if os.path.isdir(self.bio_asq_path):
-            json_files = glob(self.bio_asq_path + "\\*")
+            json_files = glob(self.bio_asq_path + "/*")
         else:
             assert False, "The path does not exist"
 
@@ -38,7 +37,7 @@ class InformationRetriever:
 
         return self.bio_docs
 
-    @st.cache
+
     def encode_docs_using_qa_transformer(self, encoded_corpus_save_path: str, encoded_corpus_save_name: str):
         self.bio_docs = self.get_documents()
         self.sentence_encoding_model = SentenceTransformer('multi-qa-mpnet-base-cos-v1')
@@ -51,13 +50,12 @@ class InformationRetriever:
 
         if not os.path.isdir(encoded_corpus_save_path):
             os.mkdir(encoded_corpus_save_path)
-        encoded_corpus_save_full_path = encoded_corpus_save_path + "\\" + encoded_corpus_save_name
+        encoded_corpus_save_full_path = encoded_corpus_save_path + "/" + encoded_corpus_save_name
         print("Saving Encoded Corpus on path: " + encoded_corpus_save_full_path)
         torch.save(self.encoded_corpus, encoded_corpus_save_full_path)
 
         return self.encoded_corpus
 
-    @st.cache
     def retrieve_docs_based_on_query(self, query, encoded_corpus):
         if self.encoded_corpus is None:
             self.encoded_corpus = encoded_corpus
