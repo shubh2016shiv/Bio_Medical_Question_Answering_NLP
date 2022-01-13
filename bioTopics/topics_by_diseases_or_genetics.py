@@ -7,10 +7,10 @@ class TopicsByDiseasesOrGenetics:
 
     def readNERFile(self, ner_type: str):
         if ner_type == 'DISEASES':
-            with open(self.ner_path + "\\DiseasesNER.txt", encoding='utf-8') as file:
+            with open(self.ner_path + "/DiseasesNER.txt", encoding='utf-8') as file:
                 ner_content = file.read().splitlines()
         elif ner_type == 'GENETICS':
-            with open(self.ner_path + "\\geneticsNER.txt", encoding='utf-8') as file:
+            with open(self.ner_path + "/GeneticsNER.txt", encoding='utf-8') as file:
                 ner_content = file.read().splitlines()
 
         return ner_content
