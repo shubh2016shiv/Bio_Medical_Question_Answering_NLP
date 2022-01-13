@@ -93,7 +93,14 @@ navigation_options = st.sidebar.radio("Options", options=["Show Project Architec
 if navigation_options == "Show Project Architecture and details":
     st.info("💁Mark the below checkbox step by step to trigger the Engine")
     model_path = config['topic_cluster']['model_path'] + "/" + config['topic_cluster']['model_name']
-    if st.checkbox(label="Initialize models") and not os.path.exists(model_path):
+    
+    # Model Setup Sequence Checkbox
+    
+    topic_bert_checkbox = st.checkbox(label="Initialize models")
+    disease_genetics_ner_checkbox = st.checkbox(label="Download Extracted Disease and Genetic Entities")
+    qa_encoding_sentence_transformer_checkbox = st.checkbox(label="Initialize Sentence Transformer QA Encoding Model")
+    
+    if topic_bert_checkbox and not os.path.exists(model_path):
         with st.spinner("Please wait. Creating BERT Topic Model.."):
             topic_by_cluster = TopicsByCluster(bio_asq_path=config['bioASQ_path']['path'])
             topic_model = topic_by_cluster.trainBERTopicTransformerModel(
@@ -105,7 +112,7 @@ if navigation_options == "Show Project Architecture and details":
             del topic_model, cluster_viz
             gc.collect()
             
-    elif st.checkbox(label="Download Extracted Disease and Genetic Entities") and not (os.path.exists(config['NER']['disease_genetics_NER_path'])):
+    elif disease_genetics_ner_checkbox and not (os.path.exists(config['NER']['disease_genetics_NER_path'])):
         with st.spinner("Please wait. Downloading Extracted Diseases and Genes related NER.."):
              if not os.path.isdir(config['NER']['disease_genetics_NER_path']):
                  os.mkdir(config['NER']['disease_genetics_NER_path'])
@@ -116,20 +123,20 @@ if navigation_options == "Show Project Architecture and details":
                                                           config['NER']['disease_genetics_NER_path']
                                                           + "/" + 'geneticsNER.txt')
                 
-    elif st.checkbox(label="Encode Bio-Medical Corpus using Sentence Transformer") and not \
-            (os.path.exists(config['encoded_corpus']['path'])):
-        with st.spinner("Please Wait. Encoding corpus and Setting up Information Retriever.. "):
-            retriever = InformationRetriever(bio_asq_path=config['bioASQ_path']['path'])
+    elif qa_encoding_sentence_transformer_checkbox and not (os.path.exists(config['qa_encoded_corpus']['path'])):
+        with st.spinner("Please Wait. Setting up Encoding Sentence Transformer model for QA.. "):
+            if not os.path.isdir(config['qa_encoded_corpus']['path']):
+                os.mkdir(config['qa_encoded_corpus']['path'])
+                gdown.download_file_from_google_drive(config['qa_encoded_corpus']['model_share_id'],
+                                                      config['qa_encoded_corpus']['path']
+                                                      + "/" +
+                                                      config['qa_encoded_corpus']['model_name'])
 
-            if not os.path.isdir(config['encoded_corpus']['path']):
-                with st.spinner("Encoding the whole corpus into a model. "):
-                    encoded_bioQA_corpus = retriever.encode_docs_using_qa_transformer(
-                        encoded_corpus_save_path=config['encoded_corpus']['path'],
-                        encoded_corpus_save_name=config['encoded_corpus']['model_name'])
-
-        del retriever, encoded_bioQA_corpus
-        gc.collect()
-    elif (os.path.exists(model_path)) and (os.path.exists(config['NER']['disease_genetics_NER_path'])) and (os.path.exists(config['encoded_corpus']['path'])):
+                gdown.download_file_from_google_drive(config['qa_encoded_corpus']['encoded_corpus_share_id'],
+                                                      config['qa_encoded_corpus']['path']
+                                                      + "/" +
+                                                      config['qa_encoded_corpus']['encoded_corpus_name'])
+    elif (os.path.exists(model_path)) and (os.path.exists(config['NER']['disease_genetics_NER_path'])) and (config['qa_encoded_corpus']['path']):
         st.success("Models are ready and Engine is now hot!!")
         
 elif navigation_options == "Search Bio-Topics & Questions":
@@ -164,6 +171,4 @@ elif navigation_options == "Search Bio-Topics & Questions":
         get_docs_and_ques(filter_query)
         
 elif navigation_options == "Search Answers based on Questions":        
-    with st.spinner(f"💁Loading the encoded corpus from path: {config['encoded_corpus']['path']}."):
-        encoded_bioQA_corpus = torch.load(
-                    config['encoded_corpus']['path'] + "\\" + config['encoded_corpus']['model_name'])
+    st.write("")
