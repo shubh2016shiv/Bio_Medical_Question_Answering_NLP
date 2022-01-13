@@ -11,6 +11,7 @@ from bioTopics.topics_by_diseases_or_genetics import TopicsByDiseasesOrGenetics
 import gdown
 from bioQuestionAnswering.information_retriever import InformationRetriever
 import torch
+import joblib
 
 
 st.set_page_config(layout="wide")
