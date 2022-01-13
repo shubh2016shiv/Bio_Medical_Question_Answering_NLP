@@ -118,8 +118,7 @@ if navigation_options == "Show Project Architecture and details":
                 
     elif st.checkbox(label="Encode Bio-Medical Corpus using Sentence Transformer") and not \
             (os.path.exists(config['encoded_corpus']['path'])):
-        st.info("💁Initiating Information Retriever")
-        with st.spinner("Please Wait. Setting up Information Retriever.. "):
+        with st.spinner("Please Wait. Encoding corpus and Setting up Information Retriever.. "):
             retriever = InformationRetriever(bio_asq_path=config['bioASQ_path']['path'])
 
             if not os.path.isdir(config['encoded_corpus']['path']):
