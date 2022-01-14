@@ -12,6 +12,7 @@ import gdown
 from bioQuestionAnswering.information_retriever import InformationRetriever
 import torch
 import joblib
+from sentence_transformers import util
 
 
 st.set_page_config(layout="wide")
@@ -51,7 +52,14 @@ def get_cached_qa_encoding_model():
                                 + "/" +
                                 config['qa_encoded_corpus']['encoded_corpus_name'])
 
-    return model,encoded_corpus        
+    return model,encoded_corpus      
+
+@st.experimental_singleton(suppress_st_warning=True)
+def get_bio_docs():
+    docs = joblib.load(config['qa_encoded_corpus']['path']
+                       + "/" +
+                       config['qa_encoded_corpus']['bio_docs_name'])
+    return docs
         
         
 def get_keywords_and_filter_query(_topic_model, _bio_topics):
@@ -150,6 +158,12 @@ if navigation_options == "Show Project Architecture and details":
                                                       config['qa_encoded_corpus']['path']
                                                       + "/" +
                                                       config['qa_encoded_corpus']['encoded_corpus_name'])
+                
+                gdown.download_file_from_google_drive(config['qa_encoded_corpus']['bio_docs_share_id'],
+                                                      config['qa_encoded_corpus']['path']
+                                                      + "/" +
+                                                      config['qa_encoded_corpus']['bio_docs_name'])
+                
     elif (os.path.exists(model_path)) and (os.path.exists(config['NER']['disease_genetics_NER_path'])) and (config['qa_encoded_corpus']['path']):
         st.success("Models are ready and Engine is now hot!!")
         
@@ -187,3 +201,15 @@ elif navigation_options == "Search Bio-Topics & Questions":
 elif navigation_options == "Search Answers based on Questions":        
     with st.spinner("Please Wait. Setting up Information Retriever.. "):
         model,encoded_corpus = get_cached_qa_encoding_model()
+        bio_docs = get_bio_docs()
+    query = st.text_input(label="Type the question here")
+    query_embedding = model.encode(query, convert_to_tensor=True)
+    cos_scores = util.pytorch_cos_sim(query_embedding, encoded_corpus)[0]
+    top_results = torch.topk(cos_scores, k=10)
+    st.write(top_results)
+    relevant_context = []
+    for score, idx in zip(top_results[0], top_results[1]):
+        relevant_context.append(bio_docs[idx])
+        # print(bio_docs[idx], "(Score: {:.4f})".format(score))
+
+    st.write(relevant_context)
