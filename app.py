@@ -207,7 +207,7 @@ elif navigation_options == "Search Answers based on Questions":
     query = st.text_input(label="Type the question here")
     if query != "":
         query_embedding = model.encode(query, convert_to_tensor=True)
-        st.write(query_embedding)
+       
         cos_scores = util.pytorch_cos_sim(query_embedding, encoded_corpus)[0]
         top_results = torch.topk(cos_scores, k=10)
         st.write(top_results)
@@ -216,7 +216,7 @@ elif navigation_options == "Search Answers based on Questions":
             relevant_context.append(bio_docs[idx])
             # print(bio_docs[idx], "(Score: {:.4f})".format(score))
 
-        document_expander = st.expander("Predicted answers")
+        document_expander = st.expander("Top 10 Documents relevant to the question based on cosine similarity")
         with document_expander:
             st.write(relevant_context)
 
