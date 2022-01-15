@@ -215,4 +215,4 @@ elif navigation_options == "Search Answers based on Questions":
             relevant_context.append(bio_docs[idx])
             # print(bio_docs[idx], "(Score: {:.4f})".format(score))
 
-    st.write(relevant_context)
+        st.write(relevant_context)
