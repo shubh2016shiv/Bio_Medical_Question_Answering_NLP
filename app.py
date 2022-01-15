@@ -216,7 +216,7 @@ elif navigation_options == "Search Answers based on Questions":
             relevant_context.append(bio_docs[idx])
             # print(bio_docs[idx], "(Score: {:.4f})".format(score))
 
-        document_expander = st.expander("Top 10 Documents relevant to the question based on cosine similarity")
+        document_expander = st.expander("Click here to show Top 10 Documents relevant to the question based on cosine similarity")
         with document_expander:
             st.write(relevant_context)
 
@@ -224,7 +224,7 @@ elif navigation_options == "Search Answers based on Questions":
             extractor = InformationExtractor(query, relevant_context)
             answers = {}
             st.success("✓ Below are predicted possible answers.")
-            answers_expander = st.expander("Predicted answers")
+            answers_expander = st.expander("Click here to show Predicted answers")
             with answers_expander:
                 predicted_10_answers = extractor.search_and_predict_answers()
                 for prediction in predicted_10_answers:
