@@ -120,7 +120,6 @@ if navigation_options == "Show Project Details and Architecture":
     model_path = config['topic_cluster']['model_path'] + "/" + config['topic_cluster']['model_name']
     
     # Model Setup Sequence Checkbox
-    
     topic_bert_checkbox = st.checkbox(label="Initialize Bio-BERT Topic Cluster Model")
     disease_genetics_ner_checkbox = st.checkbox(label="Download Extracted Disease and Genetic Entities")
     qa_encoding_sentence_transformer_checkbox = st.checkbox(label="Initialize Sentence Transformer QA Encoding Model")
@@ -137,6 +136,8 @@ if navigation_options == "Show Project Details and Architecture":
             del topic_model, cluster_viz
             gc.collect()
             
+        st.info("💁Now, Topic Clusters can be Explored from Navigation > Search Bio-Topics & Questions > Bio Clusters")
+            
     elif disease_genetics_ner_checkbox and not (os.path.exists(config['NER']['disease_genetics_NER_path'])):
         with st.spinner("Please wait. Downloading Extracted Diseases and Genes related NER.."):
              if not os.path.isdir(config['NER']['disease_genetics_NER_path']):
@@ -147,6 +148,7 @@ if navigation_options == "Show Project Details and Architecture":
                  gdown.download_file_from_google_drive(config['NER']['genetics_NER_share_id'],
                                                           config['NER']['disease_genetics_NER_path']
                                                           + "/" + 'geneticsNER.txt')
+        st.info("💁Now, Topics based on Disease and Genetic Entities can be Explored from Navigation > Search Bio-Topics & Questions > Diseases / Genetics")
                 
     elif qa_encoding_sentence_transformer_checkbox and not (os.path.exists(config['qa_encoded_corpus']['path'])):
         with st.spinner("Please Wait. Setting up Encoding Sentence Transformer model for QA.. "):
@@ -166,6 +168,7 @@ if navigation_options == "Show Project Details and Architecture":
                                                       config['qa_encoded_corpus']['path']
                                                       + "/" +
                                                       config['qa_encoded_corpus']['bio_docs_name'])
+        st.info("💁Now, Question and Answering on Bio-Medical data can be done from Navigation > Search Answers based on Questions")    
                 
     elif (os.path.exists(model_path)) and (os.path.exists(config['NER']['disease_genetics_NER_path'])) and (config['qa_encoded_corpus']['path']):
         st.success("Pre-Trained Models and Pipelines are ready. Engine is now hot.\
