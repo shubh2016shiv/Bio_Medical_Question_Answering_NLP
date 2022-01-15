@@ -124,27 +124,27 @@ if navigation_options == "Show Project Details and Architecture":
     disease_genetics_ner_checkbox = st.checkbox(label="Download Extracted Disease and Genetic Entities")
     qa_encoding_sentence_transformer_checkbox = st.checkbox(label="Initialize Sentence Transformer QA Encoding Model")
     
-#     if topic_bert_checkbox and not os.path.exists(model_path):
-#         with st.spinner("Please wait. Creating BERT Topic Model.."):
-#             topic_by_cluster = TopicsByCluster(bio_asq_path=config['bioASQ_path']['path'])
-#             topic_model = topic_by_cluster.trainBERTopicTransformerModel(
-#                 topic_model_save_path=config['topic_cluster']['model_path'],
-#                 topic_model_save_name=config['topic_cluster']['model_name'])
+    if topic_bert_checkbox and not os.path.exists(model_path):
+        with st.spinner("Please wait. Creating BERT Topic Model.."):
+            topic_by_cluster = TopicsByCluster(bio_asq_path=config['bioASQ_path']['path'])
+            topic_model = topic_by_cluster.trainBERTopicTransformerModel(
+                topic_model_save_path=config['topic_cluster']['model_path'],
+                topic_model_save_name=config['topic_cluster']['model_name'])
 
-#             cluster_viz = topic_model.visualize_topics()
-#             cluster_viz.write_html(config['topic_cluster']['model_path'] + "/" + config['topic_cluster']['cluster_viz_name'])
-#             del topic_model, cluster_viz
-#             gc.collect()
-    if topic_bert_checkbox and not os.path.exists(config['topic_cluster']['model_path']):
-        with st.spinner("Please wait. Downloading Pre-Trained BERT Topic Model.."):
-            if not os.path.isdir(config['topic_cluster']['model_path']):
-                os.mkdir(config['topic_cluster']['model_path'])
-                gdown.download_file_from_google_drive(config['topic_cluster']['model_share_id'],
-                                                      config['topic_cluster']['model_path']
-                                                      + "/" + config['topic_cluster']['model_name'])
-                gdown.download_file_from_google_drive(config['topic_cluster']['cluster_viz_share_id'],
-                                                      config['topic_cluster']['model_path']
-                                                      + "/" + config['topic_cluster']['cluster_viz_name']) 
+            cluster_viz = topic_model.visualize_topics()
+            cluster_viz.write_html(config['topic_cluster']['model_path'] + "/" + config['topic_cluster']['cluster_viz_name'])
+            del topic_model, cluster_viz
+            gc.collect()
+#     if topic_bert_checkbox and not os.path.exists(config['topic_cluster']['model_path']):
+#         with st.spinner("Please wait. Downloading Pre-Trained BERT Topic Model.."):
+#             if not os.path.isdir(config['topic_cluster']['model_path']):
+#                 os.mkdir(config['topic_cluster']['model_path'])
+#                 gdown.download_file_from_google_drive(config['topic_cluster']['model_share_id'],
+#                                                       config['topic_cluster']['model_path']
+#                                                       + "/" + config['topic_cluster']['model_name'])
+#                 gdown.download_file_from_google_drive(config['topic_cluster']['cluster_viz_share_id'],
+#                                                       config['topic_cluster']['model_path']
+#                                                       + "/" + config['topic_cluster']['cluster_viz_name']) 
             
         st.info("💁Now, Topic Clusters can be Explored from Navigation > Search Bio-Topics & Questions > Bio Clusters")
             
