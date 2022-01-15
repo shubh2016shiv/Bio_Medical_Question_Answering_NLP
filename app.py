@@ -109,7 +109,7 @@ def get_docs_and_ques(query):
 
 
 st.sidebar.header("Navigation")
-navigation_options = st.sidebar.radio("Options", options=["Show Project Architecture and details",
+navigation_options = st.sidebar.selectbox("Options", options=["Show Project Architecture and details",
                                                           "Search Bio-Topics & Questions",
                                                           "Search Answers based on Questions"])
 
@@ -119,7 +119,7 @@ if navigation_options == "Show Project Architecture and details":
     
     # Model Setup Sequence Checkbox
     
-    topic_bert_checkbox = st.checkbox(label="Initialize models")
+    topic_bert_checkbox = st.checkbox(label="Initialize Bio-BERT Topic Cluster Model")
     disease_genetics_ner_checkbox = st.checkbox(label="Download Extracted Disease and Genetic Entities")
     qa_encoding_sentence_transformer_checkbox = st.checkbox(label="Initialize Sentence Transformer QA Encoding Model")
     
