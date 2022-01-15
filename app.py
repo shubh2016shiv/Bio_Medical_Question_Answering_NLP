@@ -30,7 +30,8 @@ def get_cached_topic_cluster_model():
     with st.spinner("Loading BERT Topic Model..."):
         model_path_ = config['topic_cluster']['model_path'] + "/" + config['topic_cluster']['model_name']
         if os.path.isdir(config['topic_cluster']['model_path']) and os.path.exists(model_path_):
-            topic_model_ = BERTopic.load(model_path_)
+            #topic_model_ = BERTopic.load(model_path_)
+            topic_model_ = joblib.load(model_path_)
             return topic_model_
         else:
             st.info("BERT Topic model is not available")
