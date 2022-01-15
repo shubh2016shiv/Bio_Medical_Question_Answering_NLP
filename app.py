@@ -123,9 +123,9 @@ if navigation_options == "Show Project Details and Architecture":
     model_path = config['topic_cluster']['model_path'] + "/" + config['topic_cluster']['model_name']
     
     # Model Setup Sequence Checkbox
-    topic_bert_checkbox = st.checkbox(label="Initialize Bio-BERT Topic Cluster Model")
-    disease_genetics_ner_checkbox = st.checkbox(label="Download Extracted Disease and Genetic Entities")
-    qa_encoding_sentence_transformer_checkbox = st.checkbox(label="Initialize Sentence Transformer QA Encoding Model")
+    topic_bert_checkbox = st.checkbox(label="Setup the Bio-Topic Cluster created using BERT Topic Model")
+    disease_genetics_ner_checkbox = st.checkbox(label="Setup Disease and Genetic Entities Extracted using NER Pipeline of Hugging Face's Transformer")
+    qa_encoding_sentence_transformer_checkbox = st.checkbox(label="Setup Sentence Transformer QA Encoding Model for Information Retrieval")
 ###   Uncomment below to train BERTopic from Scratch  ##  
 #     if topic_bert_checkbox and not os.path.exists(model_path):
 #         with st.spinner("Please wait. Creating BERT Topic Model.."):
@@ -141,7 +141,7 @@ if navigation_options == "Show Project Details and Architecture":
 
 ## Comment Below 'if' block to traing BERTopic from scratch 
     if topic_bert_checkbox and not os.path.exists(config['topic_cluster']['model_path']):
-        with st.spinner("Please wait. Downloading Pre-Trained BERT Topic Model.."):
+        with st.spinner("Please wait. Downloading Topic Clusters from Pre-Trained BERT Topic Model.."):
             if not os.path.isdir(config['topic_cluster']['model_path']):
                 os.mkdir(config['topic_cluster']['model_path'])
                 gdown.download_file_from_google_drive(config['topic_cluster']['cluster_topics_share_id'],
@@ -154,7 +154,7 @@ if navigation_options == "Show Project Details and Architecture":
         st.info("💁Now, Topic Clusters can be Explored from Navigation > Search Bio-Topics & Questions > Bio Clusters")
             
     elif disease_genetics_ner_checkbox and not (os.path.exists(config['NER']['disease_genetics_NER_path'])):
-        with st.spinner("Please wait. Downloading Extracted Diseases and Genes related NER.."):
+        with st.spinner("Please wait. Downloading Extracted Diseases and Genes related Entities.."):
              if not os.path.isdir(config['NER']['disease_genetics_NER_path']):
                  os.mkdir(config['NER']['disease_genetics_NER_path'])
                  gdown.download_file_from_google_drive(config['NER']['disease_NER_share_id'],
