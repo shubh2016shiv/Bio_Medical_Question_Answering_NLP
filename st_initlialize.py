@@ -14,8 +14,8 @@ def initialize_streamlit_and_mongodb():
         os.mkdir('./resources')
 
     # Handling initialization for Topic model
-    if not os.path.isdir(config['topic_cluster']['model_path']):
-        os.mkdir(config['topic_cluster']['model_path'], 0o777)
+#     if not os.path.isdir(config['topic_cluster']['model_path']):
+#         os.mkdir(config['topic_cluster']['model_path'], 0o777)
 
     # initialize MongoDB Cloud Connection
     db_name = config['mongo']['database_name']
