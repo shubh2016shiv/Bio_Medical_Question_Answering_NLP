@@ -110,7 +110,7 @@ def get_docs_and_ques(query):
 
 
 st.sidebar.header("Navigation")
-navigation_options = st.sidebar.selectbox("Options", options=["Show Project Architecture and details",
+navigation_options = st.sidebar.selectbox("Options", options=["Show Project Details and Architecture",
                                                           "Search Bio-Topics & Questions",
                                                           "Search Answers based on Questions"])
 
