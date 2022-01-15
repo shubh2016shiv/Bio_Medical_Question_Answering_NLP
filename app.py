@@ -14,6 +14,7 @@ from bioQuestionAnswering.information_extractor import InformationExtractor
 import torch
 import joblib
 from sentence_transformers import util
+import shutil
 
 
 st.set_page_config(layout="wide")
@@ -113,7 +114,8 @@ navigation_options = st.sidebar.selectbox("Options", options=["Show Project Arch
                                                           "Search Bio-Topics & Questions",
                                                           "Search Answers based on Questions"])
 
-if navigation_options == "Show Project Architecture and details":
+if navigation_options == "Show Project Details and Architecture":
+    st.header("Instructions to proceed")
     st.info("💁Mark the below checkbox step by step to trigger the Engine")
     model_path = config['topic_cluster']['model_path'] + "/" + config['topic_cluster']['model_name']
     
@@ -166,7 +168,26 @@ if navigation_options == "Show Project Architecture and details":
                                                       config['qa_encoded_corpus']['bio_docs_name'])
                 
     elif (os.path.exists(model_path)) and (os.path.exists(config['NER']['disease_genetics_NER_path'])) and (config['qa_encoded_corpus']['path']):
-        st.success("Models are ready and Engine is now hot!!")
+        st.success("Pre-Trained Models and Pipelines are ready. Engine is now hot.\
+        \n >> Topics based on Clusters, Diseases or Genetics and Questions \
+                related to them can be searched or explored from Navigation option: 'Search Bio-Topics and Questions' in Slidebar.\
+                \n>> After searching topic and its related question, copy the question and navigate to Navigation option: 'Search Answers based on Questions' in Slidebar to predict the answers to Bio-Medical Question")
+
+    st.header("Downloads - Data and Jupyter Notebooks")
+    download_options = st.selectbox("Options", options=["None",
+                                                        "Bio-Medical Question Answers (BioASQ) Data",
+                                                        "Jupyter Notebook: Topic Modelling and Disease/Genetic Entities Extraction",
+                                                        "Jupyter Notebook: Question Answering using Information Retrieval and Extraction"])
+    if download_options == "Bio-Medical Question Answers (BioASQ) Data":
+        shutil.make_archive('BioASQ_data', 'zip', config['bioASQ_path']['path'])
+        download_file_name = './BioASQ_data.zip'
+    if download_options == "Jupyter Notebook: Topic Modelling and Disease/Genetic Entities Extraction":
+        download_file_name = './BioASQ_Topic_Modelling_and_NER.ipynb'
+    if download_options == "Jupyter Notebook: Question Answering using Information Retrieval and Extraction":
+        download_file_name = './BioASQ_Question_Answering_Project.ipynb'
+    if download_options != "None":
+        with open(download_file_name, "rb") as file:
+            st.download_button(label="Download", data=file,file_name=download_file_name.replace("./",""))
         
 elif navigation_options == "Search Bio-Topics & Questions":
     topic_model = get_cached_topic_cluster_model()
