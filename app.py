@@ -64,7 +64,7 @@ def get_bio_docs():
     return docs
         
         
-def get_keywords_and_filter_query(_topic, _bio_topics):
+def get_keywords_and_filter_query(_topics, _bio_topics):
     
     ## uncomment below line to train BERTopic from Scratch
 #     words = [word[0] for word in _topic.get_topic(int(_bio_topics.split(" ")[1]))]
