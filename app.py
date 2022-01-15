@@ -201,15 +201,18 @@ elif navigation_options == "Search Bio-Topics & Questions":
 elif navigation_options == "Search Answers based on Questions":        
     with st.spinner("Please Wait. Setting up Information Retriever.. "):
         model,encoded_corpus = get_cached_qa_encoding_model()
+        print(encoded_corpus)
         bio_docs = get_bio_docs()
     query = st.text_input(label="Type the question here")
-    query_embedding = model.encode(query, convert_to_tensor=True)
-    cos_scores = util.pytorch_cos_sim(query_embedding, encoded_corpus)[0]
-    top_results = torch.topk(cos_scores, k=10)
-    st.write(top_results)
-    relevant_context = []
-    for score, idx in zip(top_results[0], top_results[1]):
-        relevant_context.append(bio_docs[idx])
-        # print(bio_docs[idx], "(Score: {:.4f})".format(score))
+    if query != "":
+        query_embedding = model.encode(query, convert_to_tensor=True)
+        st.write(query_embedding)
+        cos_scores = util.pytorch_cos_sim(query_embedding, encoded_corpus)[0]
+        top_results = torch.topk(cos_scores, k=10)
+        st.write(top_results)
+        relevant_context = []
+        for score, idx in zip(top_results[0], top_results[1]):
+            relevant_context.append(bio_docs[idx])
+            # print(bio_docs[idx], "(Score: {:.4f})".format(score))
 
     st.write(relevant_context)
