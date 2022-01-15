@@ -64,8 +64,11 @@ def get_bio_docs():
     return docs
         
         
-def get_keywords_and_filter_query(_topic_model, _bio_topics):
-    words = [word[0] for word in _topic_model.get_topic(int(_bio_topics.split(" ")[1]))]
+def get_keywords_and_filter_query(_topic, _bio_topics):
+    
+    ## uncomment below line to train BERTopic from Scratch
+#     words = [word[0] for word in _topic.get_topic(int(_bio_topics.split(" ")[1]))]
+    words = [word[0] for word in _topics[(int(_bio_topics.split(" ")[1]))]]
 
     keywords = st_tags(
         label='# Words:',
@@ -123,28 +126,30 @@ if navigation_options == "Show Project Details and Architecture":
     topic_bert_checkbox = st.checkbox(label="Initialize Bio-BERT Topic Cluster Model")
     disease_genetics_ner_checkbox = st.checkbox(label="Download Extracted Disease and Genetic Entities")
     qa_encoding_sentence_transformer_checkbox = st.checkbox(label="Initialize Sentence Transformer QA Encoding Model")
-    
-    if topic_bert_checkbox and not os.path.exists(model_path):
-        with st.spinner("Please wait. Creating BERT Topic Model.."):
-            topic_by_cluster = TopicsByCluster(bio_asq_path=config['bioASQ_path']['path'])
-            topic_model = topic_by_cluster.trainBERTopicTransformerModel(
-                topic_model_save_path=config['topic_cluster']['model_path'],
-                topic_model_save_name=config['topic_cluster']['model_name'])
+###   Uncomment below to train BERTopic from Scratch  ##  
+#     if topic_bert_checkbox and not os.path.exists(model_path):
+#         with st.spinner("Please wait. Creating BERT Topic Model.."):
+#             topic_by_cluster = TopicsByCluster(bio_asq_path=config['bioASQ_path']['path'])
+#             topic_model = topic_by_cluster.trainBERTopicTransformerModel(
+#                 topic_model_save_path=config['topic_cluster']['model_path'],
+#                 topic_model_save_name=config['topic_cluster']['model_name'])
 
-            cluster_viz = topic_model.visualize_topics()
-            cluster_viz.write_html(config['topic_cluster']['model_path'] + "/" + config['topic_cluster']['cluster_viz_name'])
-            del topic_model, cluster_viz
-            gc.collect()
-#     if topic_bert_checkbox and not os.path.exists(config['topic_cluster']['model_path']):
-#         with st.spinner("Please wait. Downloading Pre-Trained BERT Topic Model.."):
-#             if not os.path.isdir(config['topic_cluster']['model_path']):
-#                 os.mkdir(config['topic_cluster']['model_path'])
-#                 gdown.download_file_from_google_drive(config['topic_cluster']['model_share_id'],
-#                                                       config['topic_cluster']['model_path']
-#                                                       + "/" + config['topic_cluster']['model_name'])
-#                 gdown.download_file_from_google_drive(config['topic_cluster']['cluster_viz_share_id'],
-#                                                       config['topic_cluster']['model_path']
-#                                                       + "/" + config['topic_cluster']['cluster_viz_name']) 
+#             cluster_viz = topic_model.visualize_topics()
+#             cluster_viz.write_html(config['topic_cluster']['model_path'] + "/" + config['topic_cluster']['cluster_viz_name'])
+#             del topic_model, cluster_viz
+#             gc.collect()
+
+## Comment Below 'if' block to traing BERTopic from scratch 
+    if topic_bert_checkbox and not os.path.exists(config['topic_cluster']['model_path']):
+        with st.spinner("Please wait. Downloading Pre-Trained BERT Topic Model.."):
+            if not os.path.isdir(config['topic_cluster']['model_path']):
+                os.mkdir(config['topic_cluster']['model_path'])
+                gdown.download_file_from_google_drive(config['topic_cluster']['cluster_topics_share_id'],
+                                                  config['topic_cluster']['model_path']
+                                                  + "/" + config['topic_cluster']['cluster_topics_name'])
+                gdown.download_file_from_google_drive(config['topic_cluster']['cluster_viz_share_id'],
+                                                  config['topic_cluster']['model_path']
+                                                  + "/" + config['topic_cluster']['cluster_viz_name']) 
             
         st.info("💁Now, Topic Clusters can be Explored from Navigation > Search Bio-Topics & Questions > Bio Clusters")
             
@@ -203,7 +208,8 @@ if navigation_options == "Show Project Details and Architecture":
             st.download_button(label="Download", data=file,file_name=download_file_name.replace("./",""))
         
 elif navigation_options == "Search Bio-Topics & Questions":
-    topic_model = get_cached_topic_cluster_model()
+    # uncomment below line to train BERTopic from Scratch
+#     topic_model = get_cached_topic_cluster_model()
     topic_selection = st.sidebar.selectbox(
         "Select the method of determining Topics",
         ["Bio Clusters", "Diseases", "Genetics"]
@@ -215,10 +221,23 @@ elif navigation_options == "Search Bio-Topics & Questions":
         source_code = HtmlFile.read()
 
         components.html(source_code, height=650)
-        bio_topics = st.sidebar.selectbox("Select the Bio Cluster Topic Number",
-                                          ["Topic {}".format(i) for i in range(0, len(topic_model.topics) - 1)])
         
-        filter_query = get_keywords_and_filter_query(topic_model, bio_topics)
+        # comment below line to train BERTopic from Scratch
+        topics = joblib.load(config['topic_cluster']['model_path'] + "/" + config['topic_cluster']['cluster_topics_name'])
+        
+        # uncomment below line to train BERTopic from Scratch
+#         bio_topics = st.sidebar.selectbox("Select the Bio Cluster Topic Number",
+#                                           ["Topic {}".format(i) for i in range(0, len(topic_model.topics) - 1)])
+
+        # comment below line to train BERTopic from Scratch
+        bio_topics = st.sidebar.selectbox("Select the Bio Cluster Topic Number",
+                    ["Topic {}".format(i) for i in range(0, len(topics) - 1)])
+        
+        # uncomment below line to train BERTopic from Scratch
+#         filter_query = get_keywords_and_filter_query(topic_model, bio_topics)
+        
+        # comment below line to train BERTopic from Scratch
+        filter_query = get_keywords_and_filter_query(topics, bio_topics)
         get_docs_and_ques(filter_query)
         
     elif topic_selection == 'Diseases':
