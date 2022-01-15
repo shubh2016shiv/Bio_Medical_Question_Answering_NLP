@@ -10,6 +10,7 @@ from collections import OrderedDict
 from bioTopics.topics_by_diseases_or_genetics import TopicsByDiseasesOrGenetics
 import gdown
 from bioQuestionAnswering.information_retriever import InformationRetriever
+from bioQuestionAnswering.information_extractor import InformationExtractor
 import torch
 import joblib
 from sentence_transformers import util
@@ -215,4 +216,18 @@ elif navigation_options == "Search Answers based on Questions":
             relevant_context.append(bio_docs[idx])
             # print(bio_docs[idx], "(Score: {:.4f})".format(score))
 
-        st.write(relevant_context)
+        document_expander = st.expander("Predicted answers")
+        with document_expander:
+            st.write(relevant_context)
+
+        with st.spinner("💁Extracting 10 possible answers using Information Extractor QA pipeline"):
+            extractor = InformationExtractor(query, relevant_context)
+            answers = {}
+            st.success("✓ Below are predicted possible answers.")
+            answers_expander = st.expander("Predicted answers")
+            with answers_expander:
+                predicted_10_answers = extractor.search_and_predict_answers()
+                for prediction in predicted_10_answers:
+                    answers[prediction['answer']] = prediction['score']
+
+                st.write(answers)
