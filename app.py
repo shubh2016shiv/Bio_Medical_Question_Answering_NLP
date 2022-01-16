@@ -246,14 +246,15 @@ elif navigation_options == "Search Bio-Topics & Questions":
         
         # comment below line to train BERTopic from Scratch
         st.info("💁Below Keywords are based on each topic from above graph.\
+                \n>> Any specific keyword(s) or its combination can also be added or removed\
                 \n>> These keywords can be used to filter the document from database in MongoDB Cloud by filter query string generated using such keywords.\
-                \n>> Filtering can be done using logical 'OR', meaning every document should contain at least one keyword and logical 'AND', meaning each document should contain all keywords\
+                \n>> Filtering can be done using logical 'OR', meaning every document should contain at least one matching keyword and logical 'AND', meaning each document should contain all matching keywords\
                 \n>> It pulls the relevant Bio-Medical Document and Questions. Questions can be copied from here and its answer can be predicted from  Navigation option: 'Search Answers based on Questions' in Slidebar")
         filter_query = get_keywords_and_filter_query(topics, bio_topics)
         get_docs_and_ques(filter_query)
         
     elif topic_selection == 'Diseases':
-        st.info("💁Documents can be searched from MongoDB Cloud based Disease Topics or Entities.\
+        st.info("💁Documents can be searched from MongoDB Cloud based on Disease Topics or Entities.\
                 \n>> Steps to extract these disease entities from Biomedical data using NER transformer pipeline is given in Jupyter Notebook, which can be downloaded from 'Download section' on Home page.\
                 \n>> These Entities include Disease Topics or Entities like Syndromes/ Disorders/ Dystrophies/ Carcinomas/ Encephalitis/ Defects/ Fibrosis/ Infections.\
                 \n>> It auto-suggests the disease once any disease entities is typed inside below select box\
@@ -264,7 +265,7 @@ elif navigation_options == "Search Bio-Topics & Questions":
         get_docs_and_ques(filter_query)
 
     elif topic_selection == 'Genetics':
-        st.info("💁Documents can be searched from MongoDB Cloud based Genetic Topics or Entities.\
+        st.info("💁Documents can be searched from MongoDB Cloud based on Genetic Topics or Entities.\
                 \n>> Steps to extract these Genetic entities from Biomedical data using NER transformer pipeline is given in Jupyter Notebook, which can be downloaded from 'Download section' on Home page.\
                 \n>> These Entities include Genetic Topics or Entities like Genes/ Protiens/ Enzymes/ Receptors/ Complexes/ Transporters.\
                 \n>> It auto-suggests the Genetic entity once it is typed inside below select box\
