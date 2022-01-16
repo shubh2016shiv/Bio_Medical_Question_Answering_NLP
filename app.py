@@ -219,6 +219,8 @@ elif navigation_options == "Search Bio-Topics & Questions":
     )
 
     if topic_selection == 'Bio Clusters':
+        st.info("💁Below graph shows Bio-Medical keywords arranged in clusters and its size.\
+                \n>> Hover the cursor to see the keywords or zoom any cluster by dragging cursor & selecting it. Slider at the bottom of the graph can be used to target the topic")
         HtmlFile = open(config['topic_cluster']['model_path'] + "/" + config['topic_cluster']['cluster_viz_name']
                         , 'r', encoding='utf-8')
         source_code = HtmlFile.read()
@@ -240,6 +242,10 @@ elif navigation_options == "Search Bio-Topics & Questions":
 #         filter_query = get_keywords_and_filter_query(topic_model, bio_topics)
         
         # comment below line to train BERTopic from Scratch
+        st.info("💁Below Keywords are based on each topic from above graph.\
+                \n>> These keywords can be used to filter the document from database in MongoDB Cloud by filter query string generated using such keywords.\
+                \n>> Filtering can be done using logical 'OR', meaning every document should contain at least one keyword and logical 'AND', meaning each document should contain all keywords\
+                \n>> It pulls the relevant Bio-Medical Document and Questions. Questions can be copied from here and its answer can be predicted from  Navigation option: 'Search Answers based on Questions' in Slidebar")
         filter_query = get_keywords_and_filter_query(topics, bio_topics)
         get_docs_and_ques(filter_query)
         
