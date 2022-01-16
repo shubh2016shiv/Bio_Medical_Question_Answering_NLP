@@ -121,7 +121,9 @@ navigation_options = st.sidebar.selectbox("Options", options=["Show Project Deta
 if navigation_options == "Show Project Details and Architecture":
     st.header("Instructions to proceed")
     st.info("💁Mark the below checkbox step by step to trigger the Engine")
-    model_path = config['topic_cluster']['model_path'] + "/" + config['topic_cluster']['model_name']
+    
+    # Uncomment below to train BERTopic from Scratch
+#     model_path = config['topic_cluster']['model_path'] + "/" + config['topic_cluster']['model_name']
     
     # Model Setup Sequence Checkbox
     topic_bert_checkbox = st.checkbox(label="Setup the Bio-Topic Cluster created using BERT Topic Model")
@@ -186,7 +188,7 @@ if navigation_options == "Show Project Details and Architecture":
                                                       config['qa_encoded_corpus']['bio_docs_name'])
         st.info("💁Now, Question and Answering on Bio-Medical data can be done from Navigation > Search Answers based on Questions")    
                 
-    elif (os.path.exists(model_path)) and (os.path.exists(config['NER']['disease_genetics_NER_path'])) and (config['qa_encoded_corpus']['path']):
+    if (config['topic_cluster']['model_path']) and (os.path.exists(config['NER']['disease_genetics_NER_path'])) and (config['qa_encoded_corpus']['path']):
         st.success("Pre-Trained Models and Pipelines are ready. Engine is now hot.\
         \n >> Topics based on Clusters, Diseases or Genetics and Questions \
                 related to them can be searched or explored from Navigation option: 'Search Bio-Topics and Questions' in Slidebar.\
