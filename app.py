@@ -15,6 +15,7 @@ import torch
 import joblib
 from sentence_transformers import util
 import shutil
+import plotly.graph_objects as go
 
 
 st.set_page_config(layout="wide")
