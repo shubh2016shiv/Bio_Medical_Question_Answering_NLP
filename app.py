@@ -284,3 +284,10 @@ elif navigation_options == "Search Answers based on Questions":
                     answers[prediction['answer']] = prediction['score']
 
                 st.write(answers)
+                
+            fig = go.Figure(go.Bar(
+                    y=list(answers.keys()),
+                    x=list(answers.values()),
+                    orientation='h'))
+
+            st.plotly_chart(fig)
