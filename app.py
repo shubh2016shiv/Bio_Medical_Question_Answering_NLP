@@ -47,7 +47,7 @@ def get_cached_disease_genetic_entities(entity_type):
         
 @st.experimental_singleton(suppress_st_warning=True)
 def get_cached_qa_encoding_model():
-    print("Inside 'get_cached_qa_encoding_model' function")
+    st.write("Inside 'get_cached_qa_encoding_model' function") # Definilty remove this later
     model = joblib.load(config['qa_encoded_corpus']['path']
                         + "/" +
                         config['qa_encoded_corpus']['model_name'])
