@@ -11,3 +11,4 @@ sentence-transformers==2.1.0
 plotly==5.5.0
 numba==0.54.1
 numpy==1.20.3
+joblib==1.1.0
