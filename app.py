@@ -284,7 +284,7 @@ elif navigation_options == "Search Answers based on Questions":
                 \n>> It first retrieves top 10 relevant document using cosine similarity between Encoded whole Bio-Medical Corpus and Encoded Query using Sentence QA transformer called - 'multi-qa-mpnet-base-cos-v1'\
                 \n>> It then extracts the answers from each 10 fetched document using QA model - 'dmis-lab/biobert-base-cased-v1.1-squad' available on Huggingface\
                 \n>> Result is presented in dictionary format, with answer as key and score as value along with Horizontal Bar Graph")
-    print("########### HELLO #############")
+    st.write("########### HELLO #############") # definitly Remove this later
     with st.spinner("Please Wait. Setting up Information Retriever.. "):
         print(" ******* QA *******")
         model,encoded_corpus = get_cached_qa_encoding_model()
