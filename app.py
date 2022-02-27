@@ -45,7 +45,7 @@ def get_cached_disease_genetic_entities(entity_type):
     elif entity_type == 'genetics':
         return topics.getGenetics()        
         
-@st.experimental_singleton(suppress_st_warning=True)
+#@st.experimental_singleton(suppress_st_warning=True)
 def get_cached_qa_encoding_model():
     print("Inside 'get_cached_qa_encoding_model' function")
     model = joblib.load(config['qa_encoded_corpus']['path']
@@ -58,7 +58,7 @@ def get_cached_qa_encoding_model():
 
     return model,encoded_corpus      
 
-@st.experimental_singleton(suppress_st_warning=True)
+#@st.experimental_singleton(suppress_st_warning=True)
 def get_bio_docs():
     docs = joblib.load(config['qa_encoded_corpus']['path']
                        + "/" +
