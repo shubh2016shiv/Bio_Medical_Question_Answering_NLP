@@ -188,6 +188,8 @@ if navigation_options == "Show Project Details and Architecture":
                                                       config['qa_encoded_corpus']['path']
                                                       + "/" +
                                                       config['qa_encoded_corpus']['bio_docs_name'])
+                
+                st.write(os.listdir(config['qa_encoded_corpus']['path']))
         st.info("💁Now, Question and Answering on Bio-Medical data can be done from Navigation > Search Answers based on Questions")    
                 
     if (config['topic_cluster']['model_path']) and (os.path.exists(config['NER']['disease_genetics_NER_path'])) and (config['qa_encoded_corpus']['path']):
