@@ -51,7 +51,7 @@ def get_cached_qa_encoding_model():
     model = joblib.load(config['qa_encoded_corpus']['path']
                         + "/" +
                         config['qa_encoded_corpus']['model_name'])
-
+    st.write("Inside 'get_cached_qa_encoding_model' function > 2") 
     encoded_corpus = joblib.load(config['qa_encoded_corpus']['path']
                                 + "/" +
                                 config['qa_encoded_corpus']['encoded_corpus_name'])
