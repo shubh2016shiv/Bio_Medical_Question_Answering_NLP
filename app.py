@@ -47,6 +47,7 @@ def get_cached_disease_genetic_entities(entity_type):
         
 @st.experimental_singleton(suppress_st_warning=True)
 def get_cached_qa_encoding_model():
+    print("Inside 'get_cached_qa_encoding_model' function")
     model = joblib.load(config['qa_encoded_corpus']['path']
                         + "/" +
                         config['qa_encoded_corpus']['model_name'])
@@ -284,6 +285,7 @@ elif navigation_options == "Search Answers based on Questions":
                 \n>> It then extracts the answers from each 10 fetched document using QA model - 'dmis-lab/biobert-base-cased-v1.1-squad' available on Huggingface\
                 \n>> Result is presented in dictionary format, with answer as key and score as value along with Horizontal Bar Graph")
     with st.spinner("Please Wait. Setting up Information Retriever.. "):
+        print(" ******* QA *******")
         model,encoded_corpus = get_cached_qa_encoding_model()
         print(encoded_corpus)
         bio_docs = get_bio_docs()
