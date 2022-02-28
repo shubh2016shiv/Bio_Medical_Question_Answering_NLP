@@ -47,16 +47,17 @@ def get_cached_disease_genetic_entities(entity_type):
         
 @st.experimental_singleton(suppress_st_warning=True)
 def get_cached_qa_encoding_model():
-    st.write("Inside 'get_cached_qa_encoding_model' function") # Definilty remove this later
-    model = joblib.load(config['qa_encoded_corpus']['path']
-                        + "/" +
-                        config['qa_encoded_corpus']['model_name'])
+    #st.write("Inside 'get_cached_qa_encoding_model' function") # Definilty remove this later
+    #model = joblib.load(config['qa_encoded_corpus']['path']
+    #                    + "/" +
+    #                    config['qa_encoded_corpus']['model_name'])
     st.write("Inside 'get_cached_qa_encoding_model' function > 2") 
     encoded_corpus = joblib.load(config['qa_encoded_corpus']['path']
                                 + "/" +
                                 config['qa_encoded_corpus']['encoded_corpus_name'])
-
-    return model,encoded_corpus      
+    st.write("Encoded Corpus loaded successfully") 
+    #return model,encoded_corpus
+    return encoded_corpus
 
 @st.experimental_singleton(suppress_st_warning=True)
 def get_bio_docs():
