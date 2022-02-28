@@ -47,7 +47,6 @@ def get_cached_disease_genetic_entities(entity_type):
         
 @st.experimental_singleton(suppress_st_warning=True)
 def get_cached_qa_encoding_model():
-    #st.write("Inside 'get_cached_qa_encoding_model' function") # Definilty remove this later
     #model = joblib.load(config['qa_encoded_corpus']['path']
     #                    + "/" +
     #                    config['qa_encoded_corpus']['model_name'])
@@ -55,7 +54,6 @@ def get_cached_qa_encoding_model():
     ### Downloading model directly ###
     model = SentenceTransformer('multi-qa-mpnet-base-cos-v1')
     
-    st.write("Inside 'get_cached_qa_encoding_model' function > 2") 
     encoded_corpus = joblib.load(config['qa_encoded_corpus']['path']
                                 + "/" +
                                 config['qa_encoded_corpus']['encoded_corpus_name'])
@@ -199,9 +197,9 @@ if navigation_options == "Show Project Details and Architecture":
                 
     if (config['topic_cluster']['model_path']) and (os.path.exists(config['NER']['disease_genetics_NER_path'])) and (config['qa_encoded_corpus']['path']):
         st.success("Pre-Trained Models and Pipelines are ready. Engine is now hot.\
-        \n >> Topics based on Clusters, Diseases or Genetics and Questions \
+        \n > Topics based on Clusters, Diseases or Genetics and Questions \
                 related to them can be searched or explored from Navigation option: 'Search Bio-Topics and Questions' in Slidebar.\
-                \n>> After searching topic and its related question, copy the question and navigate to Navigation option: 'Search Answers based on Questions' in Slidebar to predict the answers to Bio-Medical Question")
+                \n> After searching topic and its related question, copy the question and navigate to Navigation option: 'Search Answers based on Questions' in Slidebar to predict the answers to Bio-Medical Question")
 
     st.header("Downloads - Data and Jupyter Notebooks")
     download_options = st.selectbox("Options", options=["None",
@@ -230,8 +228,8 @@ elif navigation_options == "Search Bio-Topics & Questions":
 
     if topic_selection == 'Bio Clusters':
         st.info("💁Below graph shows Bio-Medical keywords arranged in clusters and its size.\
-                \n>> Steps to create these bio-medical topics from Biomedical data using BERTopic transformer is given in Jupyter Notebook, which can be downloaded from 'Download section' on Home page.\
-                \n>> Hover the cursor to see the keywords or zoom any cluster by dragging cursor & selecting it. Slider at the bottom of the graph can be used to target the topic")
+                \n> Steps to create these bio-medical topics from Biomedical data using BERTopic transformer is given in Jupyter Notebook, which can be downloaded from 'Download section' on Home page.\
+                \n> Hover the cursor to see the keywords or zoom any cluster by dragging cursor & selecting it. Slider at the bottom of the graph can be used to target the topic")
         HtmlFile = open(config['topic_cluster']['model_path'] + "/" + config['topic_cluster']['cluster_viz_name']
                         , 'r', encoding='utf-8')
         source_code = HtmlFile.read()
@@ -254,19 +252,19 @@ elif navigation_options == "Search Bio-Topics & Questions":
         
         # comment below line to train BERTopic from Scratch
         st.info("💁Below Keywords are based on each topic from above graph.\
-                \n>> Any specific keyword(s) or its combination can also be added or removed\
-                \n>> These keywords can be used to filter the document from database in MongoDB Cloud by filter query string generated using such keywords.\
-                \n>> Filtering can be done using logical 'OR', meaning every document should contain at least one matching keyword and logical 'AND', meaning each document should contain all matching keywords\
-                \n>> It pulls the relevant Bio-Medical Document and Questions. Questions can be copied from here and its answer can be predicted from  Navigation option: 'Search Answers based on Questions' in Slidebar")
+                \n> Any specific keyword(s) or its combination can also be added or removed\
+                \n> These keywords can be used to filter the document from database in MongoDB Cloud by filter query string generated using such keywords.\
+                \n> Filtering can be done using logical 'OR', meaning every document should contain at least one matching keyword and logical 'AND', meaning each document should contain all matching keywords\
+                \n> It pulls the relevant Bio-Medical Document and Questions. Questions can be copied from here and its answer can be predicted from  Navigation option: 'Search Answers based on Questions' in Slidebar")
         filter_query = get_keywords_and_filter_query(topics, bio_topics)
         get_docs_and_ques(filter_query)
         
     elif topic_selection == 'Diseases':
         st.info("💁Documents can be searched from MongoDB Cloud based on Disease Topics or Entities.\
-                \n>> Steps to extract these disease entities from Biomedical data using NER transformer pipeline is given in Jupyter Notebook, which can be downloaded from 'Download section' on Home page.\
-                \n>> These Entities include Disease Topics or Entities like Syndromes/ Disorders/ Dystrophies/ Carcinomas/ Encephalitis/ Defects/ Fibrosis/ Infections.\
-                \n>> It auto-suggests the disease once any disease entities is typed inside below select box\
-                \n>> It pulls the relevant Bio-Medical document and questions based on Disease Entity. Questions can be copied from here and its answer can be predicted from  Navigation option: 'Search Answers based on Questions' in Slidebar")
+                \n> Steps to extract these disease entities from Biomedical data using NER transformer pipeline is given in Jupyter Notebook, which can be downloaded from 'Download section' on Home page.\
+                \n> These Entities include Disease Topics or Entities like Syndromes/ Disorders/ Dystrophies/ Carcinomas/ Encephalitis/ Defects/ Fibrosis/ Infections.\
+                \n> It auto-suggests the disease once any disease entities is typed inside below select box\
+                \n> It pulls the relevant Bio-Medical document and questions based on Disease Entity. Questions can be copied from here and its answer can be predicted from  Navigation option: 'Search Answers based on Questions' in Slidebar")
         disease_entities = get_cached_disease_genetic_entities(entity_type='disease')
         disease_option = st.selectbox("Diseases / Health Issues / Syndromes", sorted(disease_entities))
         filter_query = {"context": {'$regex': disease_option}}
@@ -274,10 +272,10 @@ elif navigation_options == "Search Bio-Topics & Questions":
 
     elif topic_selection == 'Genetics':
         st.info("💁Documents can be searched from MongoDB Cloud based on Genetic Topics or Entities.\
-                \n>> Steps to extract these Genetic entities from Biomedical data using NER transformer pipeline is given in Jupyter Notebook, which can be downloaded from 'Download section' on Home page.\
-                \n>> These Entities include Genetic Topics or Entities like Genes/ Protiens/ Enzymes/ Receptors/ Complexes/ Transporters.\
-                \n>> It auto-suggests the Genetic entity once it is typed inside below select box\
-                \n>> It pulls the relevant Bio-Medical document and questions based on Genetic entity. Questions can be copied from here and its answer can be predicted from  Navigation option: 'Search Answers based on Questions' in Slidebar")
+                \n> Steps to extract these Genetic entities from Biomedical data using NER transformer pipeline is given in Jupyter Notebook, which can be downloaded from 'Download section' on Home page.\
+                \n> These Entities include Genetic Topics or Entities like Genes/ Protiens/ Enzymes/ Receptors/ Complexes/ Transporters.\
+                \n> It auto-suggests the Genetic entity once it is typed inside below select box\
+                \n> It pulls the relevant Bio-Medical document and questions based on Genetic entity. Questions can be copied from here and its answer can be predicted from  Navigation option: 'Search Answers based on Questions' in Slidebar")
         genetics_entities = get_cached_disease_genetic_entities(entity_type='genetics')
         genetics_option = st.selectbox("Genes / Proteins / Antibodies", sorted(genetics_entities))
         filter_query = {"context": {'$regex': genetics_option}}
@@ -286,14 +284,13 @@ elif navigation_options == "Search Bio-Topics & Questions":
 elif navigation_options == "Search Answers based on Questions":
     st.write("-"*5)
     st.info("💁Question answering using Information Retrieval and Information Extraction.\
-                \n>> Steps to create Question-Answer pipeline using Information Retrieval and Information Extraction is given in Jupyter Notebook, which can be downloaded from 'Download section' on Home page.\
-                \n>> Provide the Question in below text area, which can be copied from previous Navigation Section.\
-                \n>> It first retrieves top 10 relevant document using cosine similarity between Encoded whole Bio-Medical Corpus and Encoded Query using Sentence QA transformer called - 'multi-qa-mpnet-base-cos-v1'\
-                \n>> It then extracts the answers from each 10 fetched document using QA model - 'dmis-lab/biobert-base-cased-v1.1-squad' available on Huggingface\
-                \n>> Result is presented in dictionary format, with answer as key and score as value along with Horizontal Bar Graph")
-    st.write("########### HELLO #############") # definitly Remove this later
+                \n> Steps to create Question-Answer pipeline using Information Retrieval and Information Extraction is given in Jupyter Notebook, which can be downloaded from 'Download section' on Home page.\
+                \n> Provide the Question in below text area, which can be copied from previous Navigation Section.\
+                \n> It first retrieves top 10 relevant document using cosine similarity between Encoded whole Bio-Medical Corpus and Encoded Query using Sentence QA transformer called - 'multi-qa-mpnet-base-cos-v1'\
+                \n> It then extracts the answers from each 10 fetched document using QA model - 'dmis-lab/biobert-base-cased-v1.1-squad' available on Huggingface\
+                \n> Result is presented in dictionary format, with answer as key and score as value along with Horizontal Bar Graph")
+    
     with st.spinner("Please Wait. Setting up Information Retriever.. "):
-        print(" ******* QA *******")
         model,encoded_corpus = get_cached_qa_encoding_model()
         print(encoded_corpus)
         bio_docs = get_bio_docs()
