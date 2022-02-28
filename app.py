@@ -13,7 +13,7 @@ from bioQuestionAnswering.information_retriever import InformationRetriever
 from bioQuestionAnswering.information_extractor import InformationExtractor
 import torch
 import joblib
-from sentence_transformers import util
+from sentence_transformers import util,SentenceTransformer
 import shutil
 import plotly.graph_objects as go
 
@@ -51,13 +51,17 @@ def get_cached_qa_encoding_model():
     #model = joblib.load(config['qa_encoded_corpus']['path']
     #                    + "/" +
     #                    config['qa_encoded_corpus']['model_name'])
+    
+    ### Downloading model directly ###
+    model = SentenceTransformer('multi-qa-mpnet-base-cos-v1')
+    
     st.write("Inside 'get_cached_qa_encoding_model' function > 2") 
     encoded_corpus = joblib.load(config['qa_encoded_corpus']['path']
                                 + "/" +
                                 config['qa_encoded_corpus']['encoded_corpus_name'])
     st.write("Encoded Corpus loaded successfully") 
-    #return model,encoded_corpus
-    return encoded_corpus
+    return model,encoded_corpus
+    #return encoded_corpus
 
 @st.experimental_singleton(suppress_st_warning=True)
 def get_bio_docs():
