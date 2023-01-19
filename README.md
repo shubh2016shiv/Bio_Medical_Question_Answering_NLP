@@ -1,7 +1,7 @@
 
 # Project Title
 
-Topic Modelling and Bio-Medical Question Answering using NLP Transformers
+Bio-Medical and Topic Modelling Question Answering using NLP Transformers
 
 
 ## 🛠 Skills
