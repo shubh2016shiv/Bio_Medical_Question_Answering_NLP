@@ -46,4 +46,7 @@ Pytorch, MongoDB, Python, Streamlit 1.4.0, Spacy 3.2.0, HuggingFace
 
 [![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/shubham-singh-060525108/)
 
+## Bio-Medical Topics and Their Clusters
+
+
 
