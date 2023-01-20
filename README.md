@@ -73,7 +73,7 @@ Genetic Entity recognition and extraction is done using BioBERT Disease NER ([bi
 [The Colab Notebook for Question-Answering on Bio-Medical Corpus](https://colab.research.google.com/drive/13rTpvjzE6qgArvrbc2wCri70U0wki7I4?usp=sharing)
 
 Select 'Search Answers based on Question' in Navigation and Give the Bio-Medical related question in text area.
-![](https://github.com/shubh2016shiv/Bio_Medical_QA_New/blob/main/Image%20Resources/Asking%20Bio-Medical%20Question.png)
+![](https://github.com/shubh2016shiv/Bio_Medical_QA_New/blob/main/Image%20Resources/Bio-Medical%20Question.png)
 
 Press ENTER key to trigger the information retriever to retrive top 10 most matching documents related to the question in decreasing order of cosine similarity between question and documents 
 ![](https://github.com/shubh2016shiv/Bio_Medical_QA_New/blob/main/Image%20Resources/Information%20Retrieval.png)
