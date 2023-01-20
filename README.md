@@ -48,5 +48,5 @@ Pytorch, MongoDB, Python, Streamlit 1.4.0, Spacy 3.2.0, HuggingFace
 
 ## Bio-Medical Topics and Their Clusters
 
-![](https://github.com/Your_Repository_Name/Your_GIF_Name.gif)
+![](https://github.com/shubh2016shiv/Bio_Medical_QA_New/blob/main/Image%20Resources/Bio-Medical%20Topic%20Cluster.gif)
 
