@@ -52,11 +52,32 @@ Pytorch, MongoDB, Python, Streamlit 1.4.0, Spacy 3.2.0, HuggingFace
 
 ## Bio-Medical Topics and Their Clusters
 
-BERTopic is used for training and creating cluster on Bio-Medical Corpus after retaining only NOUN and ADJECTIVES using Spacy NLP library. The Cluster are as follows: 
+BERTopic is used for training and creating cluster on Bio-Medical Corpus after extracting out only NOUN and ADJECTIVES using Spacy NLP library. The Cluster are as follows: 
+
 ![](https://github.com/shubh2016shiv/Bio_Medical_QA_New/blob/main/Image%20Resources/Bio-Medical%20Topic%20Cluster.gif)
 
 ## Extracting Disease Entities using NER HuggingFace Pipeline
 [Code Section for getting Diseases Entities using HuggingFace](https://colab.research.google.com/drive/1BOOWj70x5YgNaCwKNqdBoHb5VpfFYnJb?authuser=1#scrollTo=mkryooi2JzPo)
 
+Disease Entity recognition and extraction using transformer called [Bio-Former](https://huggingface.co/bioformers/bioformer-cased-v1.0-ncbi-disease) with HuggingFace NER pipeline
 A transformer called [Bio-Former](https://huggingface.co/bioformers/bioformer-cased-v1.0-ncbi-disease) is used with NER HuggingFace Pipeline to extract out the Diseases
-![](https://github.com/shubh2016shiv/Bio_Medical_QA_New/blob/main/Image%20Resources/Disease%20NER%20using%20Huggingface%20BioFormer.png)
+![](https://github.com/shubh2016shiv/Bio_Medical_QA_New/blob/main/Image%20Resources/Disease%20NER%20using%20HuggingFace.png)
+
+## Extracting Genetic Entities using NER HuggingFace Pipeline
+[Code Section for getting Genetic Entities using HuggingFace](https://colab.research.google.com/drive/1BOOWj70x5YgNaCwKNqdBoHb5VpfFYnJb?authuser=1#scrollTo=5Us7Y12YJ3TF)
+
+Genetic Entity recognition and extraction is done using BioBERT Disease NER ([biobert_genetic_ner](https://huggingface.co/alvaroalon2/biobert_genetic_ner))
+![](https://github.com/shubh2016shiv/Bio_Medical_QA_New/blob/main/Image%20Resources/Genetic%20NER%20using%20HuggingFace.png)
+
+## Question-Answering using Information Retrieval and Extraction
+[The Colab Notebook for Question-Answering on Bio-Medical Corpus](https://colab.research.google.com/drive/13rTpvjzE6qgArvrbc2wCri70U0wki7I4?usp=sharing)
+
+Select 'Search Answers based on Question' in Navigation and Give the Bio-Medical related question in text area.
+![](https://github.com/shubh2016shiv/Bio_Medical_QA_New/blob/main/Image%20Resources/Asking%20Bio-Medical%20Question.png)
+
+Press ENTER key to trigger the information retriever to retrive top 10 most matching documents related to the question in decreasing order of cosine similarity between question and documents 
+![](https://github.com/shubh2016shiv/Bio_Medical_QA_New/blob/main/Image%20Resources/Information%20Retrieval.png)
+
+After Retrieving the best matching documents, the information extraction is automatically initiated to search for the answer for question in the retrived documents.
+For this purpose, Question-Answering pipeline using HuggingFace transformer - [BioBERT Transformer](https://huggingface.co/dmis-lab/biobert-large-cased-v1.1) is used. 
+![](https://github.com/shubh2016shiv/Bio_Medical_QA_New/blob/main/Image%20Resources/Information%20Extraction.png)
