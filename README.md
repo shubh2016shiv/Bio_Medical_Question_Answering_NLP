@@ -59,4 +59,4 @@ BERTopic is used for training and creating cluster on Bio-Medical Corpus after r
 [Code Section for getting Diseases Entities using HuggingFace](https://colab.research.google.com/drive/1BOOWj70x5YgNaCwKNqdBoHb5VpfFYnJb?authuser=1#scrollTo=mkryooi2JzPo)
 
 A transformer called [Bio-Former](https://huggingface.co/bioformers/bioformer-cased-v1.0-ncbi-disease) is used with NER HuggingFace Pipeline to extract out the Diseases
-![](https://github.com/shubh2016shiv/Bio_Medical_QA_New/blob/main/Image%20Resources/Disease%20NER.png)
+![](https://github.com/shubh2016shiv/Bio_Medical_QA_New/blob/main/Image%20Resources/Disease%20NER%20using%20Huggingface%20BioFormer.png)
