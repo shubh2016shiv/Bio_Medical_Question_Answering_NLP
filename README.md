@@ -42,11 +42,20 @@ Pytorch, MongoDB, Python, Streamlit 1.4.0, Spacy 3.2.0, HuggingFace
 
 
 ## 🔗 Links
+**Working Application Demonstration**
+
 [![Open Application in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://shubh2016shiv-bio-medical-qa-new-app-tguwht.streamlit.app/)
+
+**My LinkedIn Profile**
 
 [![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/shubham-singh-060525108/)
 
 ## Bio-Medical Topics and Their Clusters
 
+BERTopic is used for training and creating cluster on Bio-Medical Corpus after retaining only NOUN and ADJECTIVES using Spacy NLP library. The Cluster are as follows: 
 ![](https://github.com/shubh2016shiv/Bio_Medical_QA_New/blob/main/Image%20Resources/Bio-Medical%20Topic%20Cluster.gif)
 
+## Extracting Disease Entities using NER HuggingFace Pipeline
+[Code Section for getting Diseases Entities using HuggingFace](https://colab.research.google.com/drive/1BOOWj70x5YgNaCwKNqdBoHb5VpfFYnJb?authuser=1#scrollTo=mkryooi2JzPo)
+
+A transformer called [Bio-Former](https://huggingface.co/bioformers/bioformer-cased-v1.0-ncbi-disease) is used with NER HuggingFace Pipeline to extract out the Diseases
